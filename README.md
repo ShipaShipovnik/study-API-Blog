@@ -30,9 +30,9 @@ class UserDetail(generics.RetrieveAPIView):
     serializer_class = serializers.UserSerializer
 ```
 
-| GET http://127.0.0.1:8000/users   | ![[Pasted image 20240908225659.png]] |
+| GET http://127.0.0.1:8000/users   | ![image](https://github.com/user-attachments/assets/9b567676-68a5-4c89-a25f-56345ec1d315) |
 | --------------------------------- | ------------------------------------ |
-| GET http://127.0.0.1:8000/users/1 | ![[Pasted image 20240908225853.png]] |
+| GET http://127.0.0.1:8000/users/1 | ![image](https://github.com/user-attachments/assets/6ed2ec0a-4723-4272-9aed-41a67230a9c4)|
 # Пост. Post
 views.py :
 ```python
@@ -50,9 +50,9 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerReadOnly]
 ```
 
-| http://127.0.0.1:8000/posts   | ![[Pasted image 20240908230014.png]] |
+| http://127.0.0.1:8000/posts   | ![image](https://github.com/user-attachments/assets/ca2617fe-65d4-4cd0-b6b6-b38c6d7d2ab0) |
 | ----------------------------- | ------------------------------------ |
-| http://127.0.0.1:8000/posts/6 | ![[Pasted image 20240908230038.png]] |
+| http://127.0.0.1:8000/posts/6 | ![image](https://github.com/user-attachments/assets/093c9b03-0e39-47b6-bdbd-f518316783e0) |
 
 # Комментарий. Comment 
 views.py :
@@ -72,9 +72,9 @@ class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerReadOnly]
 ```
 
-| http://127.0.0.1:8000/comments/  | ![[Pasted image 20240908230244.png]] |
+| http://127.0.0.1:8000/comments/  | ![image](https://github.com/user-attachments/assets/0159fa80-ad95-407e-82fd-bcd6f844566f) |
 | -------------------------------- | ------------------------------------ |
-| http://127.0.0.1:8000/comments/5 | ![[Pasted image 20240908230303.png]] |
+| http://127.0.0.1:8000/comments/5 | ![image](https://github.com/user-attachments/assets/e96457d4-1707-4b6c-bb51-d4ba6856900f) |
 # Категория. Category.
 views.py :
 ```python
@@ -92,8 +92,8 @@ class CategoryDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerReadOnly]
 ```
 
-| http://127.0.0.1:8000/categories/  | ![[Pasted image 20240908230409.png]] |
+| http://127.0.0.1:8000/categories/  | ![image](https://github.com/user-attachments/assets/df7c10cf-d5a0-4692-bd8f-29a120820cf1) |
 | ---------------------------------- | ------------------------------------ |
-| http://127.0.0.1:8000/categories/2 | ![[Pasted image 20240908230356.png]] |
+| http://127.0.0.1:8000/categories/2 | ![image](https://github.com/user-attachments/assets/3cbeaf56-f1d9-49eb-a607-b62e67ee4fcd) |
 # СХЕМА БАЗЫ ДАННЫХ
-![[Pasted image 20240908230625.png]]
+![image](https://github.com/user-attachments/assets/7e52e71a-cdaf-4167-9a01-8eeaf49806e4)
