@@ -9,16 +9,17 @@ class PostSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Post
-        fields = ['id', 'title', 'body', 'owner', 'comments']
+        fields = ['id', 'title', 'body', 'owner', 'comments','categories']
 
 #=========USER
 class UserSerializer(serializers.ModelSerializer):
     posts = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
     comments = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    categories = serializers.PrimaryKeyRelatedField(many=True,read_only=True)
 
     class Meta:
         model = User
-        fields = ['id', 'username', 'posts', 'comments']
+        fields = ['id', 'username', 'posts', 'comments','categories']
 
 #===========COMMENT
 class CommentSerializer(serializers.ModelSerializer):
@@ -27,3 +28,12 @@ class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
         fields = ['id', 'body', 'owner', 'post']
+
+#===========CATEGORY
+class CategorySerializer(serializers.ModelSerializer):
+    posts = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+    owner = serializers.ReadOnlyField(source='owner.username')
+
+    class Meta:
+        model = Comment
+        fields = ['id', 'name', 'owner', 'posts']

@@ -1,15 +1,14 @@
 from symtable import Class
-
-from django.core.serializers import serialize
 from django.shortcuts import render
 from rest_framework import generics, permissions
+from rest_framework.generics import RetrieveAPIView
 from . import serializers
 from .permissions import *
 from django.contrib.auth.models import User
-from .models import Post, Comment
+from .models import Post, Comment, Category
 
 
-# USERS=======================
+# ===========USER
 class UserList(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = serializers.UserSerializer
@@ -20,7 +19,7 @@ class UserDetail(generics.RetrieveAPIView):
     serializer_class = serializers.UserSerializer
 
 
-# POST=======================
+# ===========POST
 class PostList(generics.ListAPIView):
     queryset = Post.objects.all()
     serializer_class = serializers.PostSerializer
@@ -36,7 +35,7 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerReadOnly]
 
 
-# COMMENT=======================
+# ===========COMMENT
 class CommentList(generics.ListCreateAPIView):
     queryset = Comment.objects.all()
     serializer_class = serializers.CommentSerializer
@@ -49,4 +48,19 @@ class CommentList(generics.ListCreateAPIView):
 class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Comment.objects.all()
     serializer_class = serializers.CommentSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerReadOnly]
+
+
+#===========CATEGORY
+class CategoryList(generics.ListCreateAPIView):
+    queryset = Category.objects.all()
+    serializer_class =  serializers.CategorySerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save(owner='self.request.user')
+
+class CategoryDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Category.objects.all()
+    serializer_class = serializers.CategorySerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerReadOnly]
