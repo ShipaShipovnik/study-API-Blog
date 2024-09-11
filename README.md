@@ -1,14 +1,6 @@
 ***Серилизаторы** преобразовывают данные в формат json.*
-Серилизаторы находятся в файле serializers.py. Пример серилизатора модели Поста:
-```python
-class PostSerializer(serializers.ModelSerializer):
-    owner = serializers.ReadOnlyField(source='owner.username')
-    comments = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+Серилизаторы находятся в файле serializers.py.
 
-    class Meta:
-        model = Post
-        fields = ['id', 'title', 'body', 'owner', 'comments', 'categories']
-```
 **Представления** были написаны с помощью generics классов. *В Django REST Framework (DRF), **generics классы** — это предопределенные классы-представления (views), которые предоставляют базовую функциональность для обработки общих операций CRUD (Create, Retrieve, Update, Delete). Они упрощают создание API, предоставляя готовые реализации для этих операций, чтобы не писать много повторяющегося кода.* Находятся в файле views.py
 
 Права доступа находятся в файле permissions.py.
@@ -139,16 +131,19 @@ class CategorySerializer(serializers.ModelSerializer):
         "name": "ИИ Рразработка"
     }
 ```
-![post comment](Руководство пользоватля\post comment.PNG)
+![image](https://github.com/user-attachments/assets/df41fa5a-49e6-4a17-b51b-df5702721ec5)
+
 ## GET
 Все посты. http://127.0.0.1:8000/posts
-![get posts](Руководство пользоватля\get posts.PNG)
+![image](https://github.com/user-attachments/assets/f3661807-a133-417a-8ef9-bc461aed0858)
+
 ## PUT
 Поменять заголовок поста http://127.0.0.1:8000/posts/3
-![postput](Руководство пользоватля\postput.PNG)
+![image](https://github.com/user-attachments/assets/d6953a2b-0a46-431f-a614-e9c24c7bbe98)
+
 ## DELETE
 Удалить комментарий http://127.0.0.1:8000/comments/4
-![delete comm](Руководство пользоватля\delete comm.PNG)
+![image](https://github.com/user-attachments/assets/5b65e6db-482f-4e1e-beed-695e2a0724ac)
 
 # СХЕМА БАЗЫ ДАННЫХ
 ![image](https://github.com/user-attachments/assets/7e52e71a-cdaf-4167-9a01-8eeaf49806e4)
