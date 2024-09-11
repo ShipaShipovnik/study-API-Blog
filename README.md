@@ -1,7 +1,18 @@
-Представления были написаны с помощью generics классов. *В Django REST Framework (DRF), **generics классы** — это предопределенные классы-представления (views), которые предоставляют базовую функциональность для обработки общих операций CRUD (Create, Retrieve, Update, Delete). Они упрощают создание API, предоставляя готовые реализации для этих операций, чтобы не писать много повторяющегося кода.* Находятся в файле views.py
+***Серилизаторы** преобразовывают данные в формат json.*
+Серилизаторы находятся в файле serializers.py. Пример серилизатора модели Поста:
+```python
+class PostSerializer(serializers.ModelSerializer):
+    owner = serializers.ReadOnlyField(source='owner.username')
+    comments = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+
+    class Meta:
+        model = Post
+        fields = ['id', 'title', 'body', 'owner', 'comments', 'categories']
+```
+**Представления** были написаны с помощью generics классов. *В Django REST Framework (DRF), **generics классы** — это предопределенные классы-представления (views), которые предоставляют базовую функциональность для обработки общих операций CRUD (Create, Retrieve, Update, Delete). Они упрощают создание API, предоставляя готовые реализации для этих операций, чтобы не писать много повторяющегося кода.* Находятся в файле views.py
 
 Права доступа находятся в файле permissions.py.
-```python permissions.py
+```python
 from rest_framework import permissions
 
 class IsOwnerReadOnly(permissions.BasePermission):
@@ -29,10 +40,18 @@ class UserDetail(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = serializers.UserSerializer
 ```
+serializers.py :
+```python
+  class UserSerializer(serializers.ModelSerializer):
+      posts = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+      comments = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
+      categories = serializers.PrimaryKeyRelatedField(many=True,read_only=True)
+  
+      class Meta:
+          model = User
+          fields = ['id', 'username', 'posts', 'comments','categories']
+```
 
-| GET http://127.0.0.1:8000/users   | ![image](https://github.com/user-attachments/assets/9b567676-68a5-4c89-a25f-56345ec1d315) |
-| --------------------------------- | ------------------------------------ |
-| GET http://127.0.0.1:8000/users/1 | ![image](https://github.com/user-attachments/assets/6ed2ec0a-4723-4272-9aed-41a67230a9c4)|
 # Пост. Post
 views.py :
 ```python
@@ -49,11 +68,16 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.PostSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerReadOnly]
 ```
+serializers.py :
+```python
+class PostSerializer(serializers.ModelSerializer):
+    owner = serializers.ReadOnlyField(source='owner.username')
+    comments = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
-| http://127.0.0.1:8000/posts   | ![image](https://github.com/user-attachments/assets/ca2617fe-65d4-4cd0-b6b6-b38c6d7d2ab0) |
-| ----------------------------- | ------------------------------------ |
-| http://127.0.0.1:8000/posts/6 | ![image](https://github.com/user-attachments/assets/093c9b03-0e39-47b6-bdbd-f518316783e0) |
-
+    class Meta:
+        model = Post
+        fields = ['id', 'title', 'body', 'owner', 'comments', 'categories']
+```
 # Комментарий. Comment 
 views.py :
 ```python
@@ -71,10 +95,15 @@ class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.CommentSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerReadOnly]
 ```
+serializers.py :
+```python
+class CommentSerializer(serializers.ModelSerializer):
+    owner = serializers.ReadOnlyField(source='owner.username')
 
-| http://127.0.0.1:8000/comments/  | ![image](https://github.com/user-attachments/assets/0159fa80-ad95-407e-82fd-bcd6f844566f) |
-| -------------------------------- | ------------------------------------ |
-| http://127.0.0.1:8000/comments/5 | ![image](https://github.com/user-attachments/assets/e96457d4-1707-4b6c-bb51-d4ba6856900f) |
+    class Meta:
+        model = Comment
+        fields = ['id', 'body', 'owner', 'post']
+```
 # Категория. Category.
 views.py :
 ```python
@@ -91,9 +120,35 @@ class CategoryDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = serializers.CategorySerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerReadOnly]
 ```
+serializers.py :
+```python
+class CategorySerializer(serializers.ModelSerializer):
+    owner = serializers.ReadOnlyField(source='owner.username')
+    posts = serializers.PrimaryKeyRelatedField(many=True, read_only=True)
 
-| http://127.0.0.1:8000/categories/  | ![image](https://github.com/user-attachments/assets/df7c10cf-d5a0-4692-bd8f-29a120820cf1) |
-| ---------------------------------- | ------------------------------------ |
-| http://127.0.0.1:8000/categories/2 | ![image](https://github.com/user-attachments/assets/3cbeaf56-f1d9-49eb-a607-b62e67ee4fcd) |
+    class Meta:
+        model = Category
+        fields = ['id', 'name', 'owner', 'posts']
+```
+# РАБОТА С POSTMAN и ЗАПРОСАМИ
+## POST
+Добавление категории http://127.0.0.1:8000/categories/
+Тело:
+```json
+    {
+        "name": "ИИ Рразработка"
+    }
+```
+![post comment](Руководство пользоватля\post comment.PNG)
+## GET
+Все посты. http://127.0.0.1:8000/posts
+![get posts](Руководство пользоватля\get posts.PNG)
+## PUT
+Поменять заголовок поста http://127.0.0.1:8000/posts/3
+![postput](Руководство пользоватля\postput.PNG)
+## DELETE
+Удалить комментарий http://127.0.0.1:8000/comments/4
+![delete comm](Руководство пользоватля\delete comm.PNG)
+
 # СХЕМА БАЗЫ ДАННЫХ
 ![image](https://github.com/user-attachments/assets/7e52e71a-cdaf-4167-9a01-8eeaf49806e4)
